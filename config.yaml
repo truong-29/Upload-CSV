@@ -1,0 +1,83 @@
+# Cấu hình cơ sở dữ liệu
+database:
+  host: localhost
+  port: 3306
+  database: upload_csv_db  # Hệ thống sẽ tự động tạo nếu không tồn tại
+  username: root
+  password: ""  # Mật khẩu trống nếu MySQL không được cấu hình mật khẩu
+  charset: utf8mb4
+  driver: pymysql
+  echo: false  # Cấu hình SQLAlchemy echo
+  auto_create_db: true  # Tự động tạo CSDL nếu không tồn tại
+  connect_timeout: 10  # Thời gian chờ kết nối tính bằng giây
+  pool_size: 5  # Số lượng kết nối trong pool
+  pool_recycle: 3600  # Thời gian tái sử dụng kết nối (giây)
+
+# Cấu hình CSV
+csv:
+  sample_size: 1000  # Số lượng hàng cho phân tích mẫu
+  chunk_size: 5000   # Kích thước chunk mặc định
+  delimiter: auto    # Tự động phát hiện hoặc chỉ định cụ thể (ví dụ: ',', ';', '\t')
+  encoding: auto     # Tự động phát hiện hoặc chỉ định cụ thể (ví dụ: 'utf-8', 'latin-1')
+  skip_blank_lines: true  # Bỏ qua các dòng trống
+  skip_bad_lines: true  # Bỏ qua các dòng lỗi
+  on_bad_lines: warn  # 'error', 'warn', 'skip'
+  
+# Cấu hình bảng
+table:
+  if_exists: fail    # 'fail', 'replace', or 'append'
+  add_id_column: true  # Tự động thêm cột id tự tăng
+  id_column_name: id   # Tên cột id tự tăng
+  create_indexes: true  # Tự động tạo các chỉ mục
+  create_metadata: true  # Tạo bảng metadata
+  
+# Cấu hình kiểu dữ liệu
+data_types:
+  text_max_length: 255  # Độ dài tối đa cho kiểu VARCHAR
+  date_format: auto     # Định dạng ngày mặc định
+  type_detection: auto  # 'auto', 'strict', 'relaxed'
+  infer_datetime: true  # Tự động phát hiện kiểu dữ liệu datetime
+  
+# Cấu hình xác thực
+validation:
+  perform_validation: true  # Tự động thực hiện xác thực sau khi nạp
+  validation_queries:
+    - "row_count"           # Kiểm tra số lượng hàng đã nạp
+    - "null_values"         # Kiểm tra giá trị NULL
+    - "duplicates"          # Kiểm tra hàng trùng lặp
+  validation_threshold: 95  # Ngưỡng % để xác thực thành công
+  save_validation_report: true  # Lưu báo cáo xác thực
+  report_format: json  # 'json', 'csv', 'html'
+  
+# Cấu hình ghi log
+logging:
+  level: INFO        # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_file: upload_csv.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  log_to_console: true
+  log_to_file: true
+  max_log_size: 10485760  # 10MB
+  backup_count: 5  # Số tệp log sao lưu
+  
+# Cấu hình xử lý lỗi
+error_handling:
+  dead_letter_queue: true   # Lưu trữ các hàng lỗi
+  max_error_rows: 1000      # Số lượng hàng lỗi tối đa lưu trữ 
+  retry_count: 3  # Số lần thử lại khi gặp lỗi
+  retry_interval: 5  # Thời gian giữa các lần thử lại (giây)
+  error_file_format: csv  # 'csv', 'json'
+  error_dir: "errors"  # Thư mục lưu trữ các hàng lỗi
+
+# Cấu hình hiệu suất
+performance:
+  parallel_processing: false  # Sử dụng xử lý song song
+  max_workers: 4  # Số luồng tối đa khi xử lý song song
+  memory_limit: 0  # Giới hạn bộ nhớ sử dụng (MB, 0 = không giới hạn)
+  optimize_inserts: true  # Tối ưu hóa các thao tác INSERT
+
+# Cấu hình tạo mẫu
+sample_generation:
+  rows: 1000  # Số hàng mặc định khi tạo dữ liệu mẫu
+  columns: 10  # Số cột mặc định khi tạo dữ liệu mẫu
+  null_percentage: 5  # % giá trị NULL trong dữ liệu mẫu
+  include_special_chars: false  # Bao gồm các ký tự đặc biệt trong dữ liệu mẫu 
