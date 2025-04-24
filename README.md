@@ -171,4 +171,4 @@ python main.py --csv-file data/large_dataset.csv --table-name data --chunk-size 
 [MIT](LICENSE)
 
 ## Tác giả
-[Tên tác giả]
+[Phùng Đình Trường]
